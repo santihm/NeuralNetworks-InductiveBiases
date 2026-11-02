@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Sesgos inductivos: ¿cuándo importa la arquitectura?</title>
+<link rel="stylesheet" href="poster.css">
+</head>
+<!-- Las cifras salen de results/raw/*__v2.csv (5 semillas); el notebook las calcula y comenta.
+     tools/build_poster.py sustituye cada marcador svg:nombre por la figura o el dibujo correspondiente. -->
+<body>
+<div class="page">
+
+<header>
+  <div>
+    <span class="pill">Redes de Neuronas · Máster en IA Aplicada · UC3M</span>
+    <h1>Sesgos inductivos:<br><span class="q">¿cuándo importa la arquitectura?</span></h1>
+    <div class="authors">Alejandro Riego Velasco · Javier Aceituno Monja · Santiago Herron Mulet · Rodrigo Toldos Frutos</div>
+  </div>
+  <div class="motif-box">
+    <!--svg:motif-->
+    <div class="cap">La misma prenda, ordenada y con sus píxeles desordenados. Para el MLP es el mismo problema; para la CNN, no.</div>
+  </div>
+</header>
+
+<main>
+  <div class="lead">Un sesgo inductivo <em>ayuda</em> cuando los datos tienen la estructura que supone, y <span class="warn">estorba</span> cuando no la tienen.</div>
+
+  <div class="row models">
+    <div class="model mlp">
+      <div class="view"><!--svg:view_mlp--></div>
+      <div><div class="name">MLP</div><div class="bias">Sin sesgo espacial: ve un vector de 784 valores.</div>
+        <div class="acc">89,3 ± 0,1 % <span>test</span></div></div>
+    </div>
+    <div class="model cnn">
+      <div class="view"><!--svg:view_cnn--></div>
+      <div><div class="name">CNN</div><div class="bias">Localidad: el mismo filtro 3×3 recorre toda la imagen.</div>
+        <div class="acc">92,0 ± 0,2 % <span>test</span></div></div>
+    </div>
+    <div class="model lstm">
+      <div class="view"><!--svg:view_lstm--></div>
+      <div><div class="name">LSTM</div><div class="bias">Secuencia: lee la imagen fila a fila, de arriba abajo.</div>
+        <div class="acc">90,5 ± 0,1 % <span>test</span></div></div>
+    </div>
+    <div class="model vit">
+      <div class="view"><!--svg:view_vit--></div>
+      <div><div class="name">Transformer</div><div class="bias">Parches 4×4 que se relacionan por atención.</div>
+        <div class="acc">88,4 ± 0,4 % <span>test</span></div></div>
+    </div>
+  </div>
+
+  <div class="row setup">
+    <div class="mint">
+      <b>Datos.</b> Fashion-MNIST: 55 000 imágenes de entrenamiento, 5 000 de validación y 10 000 de test.
+      <b>Modelos.</b> Unos 100 000 parámetros cada uno. <b>Entrenamiento.</b> El mismo para los cuatro: AdamW,
+      8 000 pasos, learning rate elegido por modelo en validación y el mejor punto en validación.
+      <b>Estadística.</b> 5 semillas por condición, media ± σ e intervalo al 95 % (Welch).
+      <b>Predicciones</b> escritas antes de experimentar y no modificadas.
+    </div>
+    <div>
+      <!--svg:manip-->
+      <div class="small" style="margin-top:2mm">Qué cambiamos en cada hipótesis. En H1 y H4 se reentrena; en H3 se evalúan los modelos ya entrenados.</div>
+    </div>
+  </div>
+
+  <div class="row hyps">
+
+    <section class="hyp block">
+      <div class="head"><div class="tag"><span class="num">H1</span><span class="pill">Estructura de la entrada</span></div>
+        <span class="verdict v-yes">Confirmada</span></div>
+      <p class="claim">«La ventaja de una arquitectura con sesgo inductivo desaparece si se destruye la estructura de la entrada.»</p>
+      <div class="hero cnn"><div class="n">+2,7 → −1,5</div>
+        <div class="t">puntos de ventaja de la CNN sobre el MLP, con la imagen original y con los píxeles permutados.</div></div>
+      <!--svg:h1-->
+      <div class="why"><b>Por qué.</b> Para el MLP, permutar la entrada es permutar las columnas de su primera capa:
+        aprende lo mismo en otro orden (+0,3 pts). La CNN (−3,9) y la LSTM (−2,8) pierden la vecindad que suponen. El Transformer no nota
+        los bloques, porque solo cambian de posición y sus posiciones son aprendidas.</div>
+    </section>
+
+    <section class="hyp block">
+      <div class="head"><div class="tag"><span class="num">H2</span><span class="pill">Cantidad de datos</span></div>
+        <span class="verdict v-part">Confirmada, con matiz</span></div>
+      <p class="claim">«Cuantos menos datos, más importa el sesgo inductivo.»</p>
+      <div class="hero"><div class="n">18,6 <small>pts</small></div>
+        <div class="t">separan al mejor y al peor modelo con 100 imágenes. Con 55 000, 3,6.</div></div>
+      <!--svg:h2-->
+      <div class="why"><b>El matiz.</b> Con pocos datos la arquitectura importa más, pero porque se hunden
+        los sesgos débiles: el Transformer queda 18,6 puntos bajo el MLP. La CNN no gana más: con 100 imágenes
+        queda por debajo del MLP en media, también con otros subconjuntos, y su ventaja crece con los datos, hasta +2,7. Con prendas centradas, el MLP ya
+        funciona como un comparador de plantillas.</div>
+    </section>
+
+    <section class="hyp block">
+      <div class="head"><div class="tag"><span class="num">H3</span><span class="pill">Transformaciones en test</span></div>
+        <span class="verdict v-yes">Confirmada</span></div>
+      <p class="claim">«Una arquitectura generaliza a las transformaciones compatibles con su sesgo, pero no al resto.»</p>
+      <div class="hero cnn"><div class="n">95 %</div>
+        <div class="t">de su precisión conserva la CNN con la prenda desplazada 4 píxeles. El MLP, el 30 %.</div></div>
+      <!--svg:h3-->
+      <div class="why"><b>Por qué.</b> La convolución aplica el mismo filtro en todas partes; ninguna red tiene nada
+        que respete los giros (a 45° todas retienen menos del 30 %). La LSTM tolera
+        el desplazamiento vertical (86 %), que para ella es un retraso de la secuencia. El Transformer, en parte
+        (47 %): sus posiciones son absolutas.</div>
+    </section>
+
+    <section class="hyp block">
+      <div class="head"><div class="tag"><span class="num">H4</span><span class="pill">Memorización</span></div>
+        <span class="verdict v-yes">Confirmada</span></div>
+      <p class="claim">«Las cuatro arquitecturas pueden memorizar etiquetas aleatorias, pero no al mismo ritmo.»</p>
+      <div class="hero"><div class="n">59 → 117</div>
+        <div class="t">épocas para memorizar el 100 % de etiquetas al azar, del Transformer a la CNN. El MLP, 110 con un learning rate menor.</div></div>
+      <!--svg:h4-->
+      <div class="why"><b>Por qué.</b> Todas tienen capacidad de sobra. El MLP se estanca con el learning rate del
+        estudio (81 % de train) y memoriza con 10⁻³. Con ese mismo lr para todas: Transformer 59, LSTM 81, MLP 110 y
+        CNN 199 épocas. Todas aprenden antes lo real que el ruido.</div>
+    </section>
+
+  </div>
+
+  <div class="row bottom">
+    <section class="block">
+      <div class="head"><h2>¿Qué mira cada modelo?</h2></div>
+      <div class="xai"><!--svg:igmaps--></div>
+      <div class="small" style="margin-top:2mm">Integrated Gradients de una prenda (naranja: a favor de la clase; morado: en contra),
+        sin desplazar y desplazada 4 px. <b>r</b>: correlación entre la explicación desplazada y la original movida 4 px
+        (300 imágenes, 5 semillas); 1 = la explicación se mueve con la prenda. Solo la de la CNN lo hace.</div>
+    </section>
+
+    <section class="block">
+      <div class="head"><h2>Predicción frente a resultado</h2></div>
+      <table class="vtab">
+        <tr><th></th><th>H1<br>cae al permutar</th><th>H2<br>supera al MLP</th><th>H3<br>tolera desplazar</th><th>H4<br>memoriza antes</th></tr>
+        <!--verdict-rows-->
+      </table>
+      <div class="legend">✓ sí · ~ en parte · ✗ no. Debajo, lo previsto antes de experimentar; en rojo, los fallos.
+        <b>Acertamos <!--verdict-hits--></b>. El MLP es la referencia de H2 y H4.</div>
+    </section>
+
+    <section class="take">
+      <h2>Conclusiones</h2>
+      <ol>
+        <li><b>El sesgo cuenta si encaja con los datos.</b> La CNN es la mejor con la imagen intacta y queda por debajo del MLP con los píxeles permutados.</li>
+        <li><b>No sustituye a los datos.</b> Con 100 imágenes ninguna red supera al MLP.</li>
+        <li><b>La invariancia la da la arquitectura.</b> Sin aumento de datos, nadie tolera giros.</li>
+        <li><b>El sesgo no impide memorizar.</b> Las cuatro memorizan etiquetas al azar; cambia el ritmo.</li>
+      </ol>
+      <div class="lim">Límites: un único conjunto de datos, con prendas centradas; redes pequeñas; un learning rate por modelo, constante en H4; una sola intensidad de weight decay.</div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div>Notebook reproducible con todo el código y las cifras: <b>sesgos_inductivos.ipynb</b>. Referencias: Xiao et al. 2017 (Fashion-MNIST);
+    Zhang et al. 2017 y Arpit et al. 2017 (memorización); Dosovitskiy et al. 2021 (Transformer de visión); Sundararajan et al. 2017 (Integrated Gradients).<br>
+    Durante la realización de esta actividad, se ha utilizado Claude (Anthropic) como apoyo en la programación, el análisis y la redacción.</div>
+</footer>
+
+</div>
+</body>
+</html>

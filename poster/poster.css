@@ -1,0 +1,110 @@
+/* Póster A0 vertical (841 × 1189 mm). Estilo de las diapositivas del grupo: verde oscuro, verde azulado, ámbar
+   y morado; títulos en serif (Caladea, misma métrica que Cambria) y texto en Carlito (misma métrica que Calibri). */
+@font-face { font-family: "Caladea"; src: url("../assets/fonts/Caladea-Regular.ttf"); font-weight: 400; }
+@font-face { font-family: "Caladea"; src: url("../assets/fonts/Caladea-Bold.ttf"); font-weight: 700; }
+@font-face { font-family: "Caladea"; src: url("../assets/fonts/Caladea-Italic.ttf"); font-style: italic; }
+@font-face { font-family: "Carlito"; src: url("../assets/fonts/Carlito-Regular.ttf"); font-weight: 400; }
+@font-face { font-family: "Carlito"; src: url("../assets/fonts/Carlito-Bold.ttf"); font-weight: 700; }
+@font-face { font-family: "Carlito"; src: url("../assets/fonts/Carlito-Italic.ttf"); font-style: italic; }
+
+:root {
+  --dark: #10302F; --deep: #1E4A48; --teal: #0F8A74; --amber: #E8A33D; --ochre: #C27612; --purple: #6A4CA5;
+  --brick: #C9553B; --mint: #EAF2EF; --ink: #1F2A2A; --muted: #5B6B6A; --rule: #C9D3D0; --light: #CFE3DD;
+  --mlp: #2F3B3A; --cnn: #0F8A74; --lstm: #C27612; --vit: #6A4CA5;
+  --side: 26mm; --gap: 22mm;
+}
+@page { size: 841mm 1189mm; margin: 0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #FFFFFF; }
+body { font-family: "Carlito", sans-serif; color: var(--ink); font-size: 29pt; line-height: 1.22;
+       -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.page { width: 841mm; height: 1189mm; overflow: hidden; display: flex; flex-direction: column; }
+h1, h2, h3, .serif { font-family: "Caladea", serif; }
+p { margin: 0; }
+svg { display: block; width: 100%; height: auto; }
+svg.fig { width: 100%; height: auto; }
+
+/* ---------------------------------------------------------------- cabecera */
+header { background: var(--dark); color: #FFFFFF; padding: 12mm var(--side) 11mm; display: grid;
+         grid-template-columns: 1fr 205mm; gap: 16mm; align-items: center; }
+.pill { display: inline-block; font-family: "Carlito"; font-weight: 700; font-size: 19pt; letter-spacing: 0.14em;
+        text-transform: uppercase; border-radius: 3mm; padding: 1.6mm 5mm; background: var(--dark); color: #FFFFFF; }
+header .pill { background: var(--deep); color: var(--light); }
+header h1 { font-size: 92pt; line-height: 1.0; margin: 6mm 0 6mm; font-weight: 700; letter-spacing: -0.005em; }
+header h1 .q { color: var(--amber); }
+header .authors { font-size: 31pt; color: var(--light); }
+header .inst { font-size: 23pt; color: #9FC2BA; margin-top: 2mm; }
+.motif-box .cap { font-size: 20pt; color: #9FC2BA; margin-top: 4mm; line-height: 1.25; }
+
+/* ---------------------------------------------------------------- bloques generales */
+main { flex: 1; padding: 7mm var(--side) 0; display: flex; flex-direction: column; gap: 6.5mm; }
+.lead { font-family: "Caladea"; font-weight: 700; font-size: 45pt; line-height: 1.12; color: var(--dark); }
+.lead em { font-style: normal; color: var(--teal); }
+.lead .warn { color: var(--brick); }
+.row { display: grid; gap: var(--gap); }
+.block { border-top: 1.4mm solid var(--dark); padding-top: 4.5mm; }
+.block > .head { display: flex; align-items: center; justify-content: space-between; gap: 6mm; margin-bottom: 3.5mm; }
+.block h2 { font-size: 40pt; margin: 0; color: var(--dark); line-height: 1.05; }
+.small { font-size: 22pt; color: var(--muted); line-height: 1.25; }
+.mint { background: var(--mint); border-radius: 3mm; padding: 4mm 6mm; }
+
+/* modelos */
+.models { grid-template-columns: repeat(4, 1fr); }
+.model { border-left: 2.2mm solid var(--c); padding-left: 5mm; display: grid; grid-template-columns: 70mm 1fr;
+         gap: 5mm; align-items: center; }
+.model .view { height: 50mm; display: flex; align-items: center; justify-content: center; }
+.model .view svg { max-height: 50mm; width: auto; max-width: 100%; }
+.model .name { font-weight: 700; font-size: 33pt; color: var(--c); line-height: 1; }
+.model .bias { font-size: 23pt; line-height: 1.15; margin-top: 1.5mm; }
+.model .acc { font-family: "Caladea"; font-weight: 700; font-size: 31pt; margin-top: 2mm; }
+.model .acc span { font-family: "Carlito"; font-weight: 400; font-size: 18pt; color: var(--muted); }
+.mlp { --c: var(--mlp); } .cnn { --c: var(--cnn); } .lstm { --c: var(--lstm); } .vit { --c: var(--vit); }
+.setup { grid-template-columns: 1fr 1fr; align-items: stretch; }
+.setup .mint { font-size: 25pt; line-height: 1.32; }
+.setup .mint b { color: var(--dark); }
+
+/* hipótesis */
+.hyps { grid-template-columns: 1fr 1fr; row-gap: 7mm; }
+.hyp .tag { display: flex; align-items: center; gap: 4mm; }
+.hyp .num { font-family: "Caladea"; font-weight: 700; font-size: 58pt; color: var(--dark); line-height: 0.9; }
+.verdict { font-weight: 700; font-size: 21pt; letter-spacing: 0.12em; text-transform: uppercase; color: #FFFFFF;
+           border-radius: 3mm; padding: 1.8mm 5mm; white-space: nowrap; }
+.v-yes { background: var(--teal); } .v-part { background: var(--ochre); } .v-no { background: var(--brick); }
+.claim { font-family: "Caladea"; font-style: italic; font-size: 29pt; line-height: 1.18; color: var(--ink);
+         margin: 0 0 3mm; }
+.hero { display: grid; grid-template-columns: auto 1fr; gap: 5mm; align-items: baseline; margin: 1mm 0 2mm; }
+.hero .n { font-family: "Caladea"; font-weight: 700; font-size: 62pt; line-height: 1; color: var(--c, var(--dark)); }
+.hero .n small { font-size: 32pt; }
+.hero .t { font-size: 24pt; line-height: 1.2; color: var(--ink); }
+.why { background: var(--mint); border-radius: 3mm; padding: 3.5mm 5.5mm; font-size: 26pt; line-height: 1.24;
+       margin-top: 2.5mm; }
+.why b { color: var(--dark); }
+
+/* fila final */
+.bottom { grid-template-columns: 1.1fr 1fr 0.9fr; }
+.xai svg { margin-top: 1mm; }
+table.vtab { width: 100%; border-collapse: collapse; font-size: 24pt; }
+table.vtab th { font-weight: 700; font-size: 21pt; color: var(--muted); text-align: center; padding: 1.5mm 1mm;
+                border-bottom: 0.5mm solid var(--rule); }
+table.vtab th:first-child { text-align: left; }
+table.vtab td { text-align: center; padding: 3.6mm 1mm; border-bottom: 0.4mm solid #E3E9E7; }
+table.vtab td:first-child { text-align: left; font-weight: 700; color: var(--c); }
+.sym { font-family: "Carlito"; font-weight: 700; font-size: 31pt; display: inline-block; width: 13mm; height: 13mm;
+       line-height: 13mm; border-radius: 50%; color: #FFFFFF; }
+.s-si { background: var(--teal); } .s-parcial { background: var(--ochre); } .s-no { background: var(--brick); }
+.pred { font-size: 19pt; color: var(--muted); display: block; line-height: 1; margin-top: 1mm; }
+.pred.miss { color: var(--brick); font-weight: 700; }
+.legend { font-size: 21pt; color: var(--muted); margin-top: 2.5mm; line-height: 1.3; }
+.take { background: var(--dark); color: #FFFFFF; border-radius: 3mm; padding: 6mm 7mm; }
+.take h2 { color: var(--amber); font-size: 36pt; margin: 0 0 3mm; }
+.take ol { margin: 0; padding-left: 9mm; font-size: 27pt; line-height: 1.25; }
+.take li { margin-bottom: 2.5mm; }
+.take li b { color: var(--amber); }
+.take .lim { font-size: 21pt; color: #9FC2BA; margin-top: 3mm; line-height: 1.25; }
+
+footer { padding: 5mm var(--side) 7mm; display: flex; justify-content: space-between; gap: 10mm;
+         font-size: 18pt; color: var(--muted); border-top: 0.5mm solid var(--rule); margin: 6mm var(--side) 0;
+         padding-left: 0; padding-right: 0; }
+.missing { border: 0.6mm dashed var(--brick); color: var(--brick); padding: 6mm; font-size: 20pt; }
+svg.manip { width: 94%; }
+.xai svg { width: 88%; margin: 1mm auto 0; }
