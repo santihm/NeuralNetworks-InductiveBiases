@@ -1,0 +1,4 @@
+exp,model,label_noise,weight_decay,lr,seed,n_train,epochs_run,epoch_50,epoch_80,epoch_95,final_train_acc,final_test_acc,seconds,n_params,device,torch,protocol,time
+h4ctl,lstm,1.0,0.0,0.001,0,5000,108,40,60,83,0.9996,0.0983,168.5053267478943,101674,cpu,2.14.1+cu130,v2,2026-10-29 22:00:37
+h4ctl,lstm,1.0,0.0,0.001,1,5000,105,38,56,78,0.999,0.0985,169.74153351783752,101674,cpu,2.14.1+cu130,v2,2026-10-29 22:03:26
+h4ctl,lstm,1.0,0.0,0.001,2,5000,115,39,57,83,0.9994,0.0993,180.97134232521057,101674,cpu,2.14.1+cu130,v2,2026-10-29 22:06:27

@@ -1,0 +1,2 @@
+exp,model,lr,seed,best_val_acc,best_step,steps_run,seconds,n_params,device,torch,protocol,time
+lrext,cnn,0.01,0,0.9358,7500,8000,1091.4131734371185,99122,cpu,2.14.1+cu130,v2,2026-10-30 00:05:16
